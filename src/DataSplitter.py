@@ -3,7 +3,6 @@ from pandas import DataFrame, read_csv, concat
 from dataclasses import dataclass
 from pathlib import Path
 from utils import RANDOM_SEED
-from typing import Optional
 
 
 def _equal_balance_sampler(sample_fraction: float, dataframes: list[DataFrame],
@@ -68,9 +67,9 @@ def _simple_sampler(sample_fraction: float, dataframe: DataFrame,
 @dataclass
 class DataSplitter:
 
-    train       :   Optional[DataFrame]
-    test        :   Optional[DataFrame]
-    validation  :   Optional[DataFrame]
+    train       :   DataFrame
+    test        :   DataFrame
+    validation  :   DataFrame
 
     def __init__(self, csv_path: Path, label_col: str, index_col: str,
                  train_size: float = 0.6, test_size: float = 0.2,
@@ -90,9 +89,9 @@ class DataSplitter:
             random_seed         (int, optional):            Random state for reproducing results
         
         Attributes:
-            train               (DataFrame, optional):      Optional Dataframe of train split, depending on the given train_fraction
-            test                (DataFrame, optional):      Optional Dataframe of test split, depending on the given test_fraction
-            validation          (Dataframe, optional):      Optional Dataframe of validation split, depending on the given validation_fraction
+            train               DataFrame:      Dataframe of train split
+            test                DataFrame:      Dataframe of test split
+            validation          Dataframe:      Dataframe of validation split
 
         Raises:
             FileNotFoundError:                  If the given csv_path does not exist
@@ -119,15 +118,15 @@ class DataSplitter:
                 class_dfs.append(data.loc[data[label_col] == cls])
 
             # Sample class dataframes into train, test, validation
-            self.train, class_dfs      = _equal_balance_sampler(train_size,         class_dfs,      random_seed=random_seed) if train_size != 0.0 else None, class_dfs
-            self.test, class_dfs       = _equal_balance_sampler(test_size,          class_dfs,      random_seed=random_seed) if test_size != 0.0 else None, class_dfs
-            self.validation, class_dfs = _equal_balance_sampler(validation_size,    class_dfs,      random_seed=random_seed) if validation_size != 0.0 else None, class_dfs
+            self.train, class_dfs      = _equal_balance_sampler(train_size,         class_dfs,      random_seed=random_seed)
+            self.test, class_dfs       = _equal_balance_sampler(test_size,          class_dfs,      random_seed=random_seed)
+            self.validation, class_dfs = _equal_balance_sampler(validation_size,    class_dfs,      random_seed=random_seed)
         
         # Simple approach
         else:
-            self.train, data      = _simple_sampler(train_size,         data,       random_seed=random_seed) if train_size != 0.0 else None, data
-            self.test,  data      = _simple_sampler(test_size,          data,       random_seed=random_seed) if test_size != 0.0 else None, data
-            self.validation, data = _simple_sampler(validation_size,    data,       random_seed=random_seed) if validation_size != 0.0 else None, data
+            self.train, data      = _simple_sampler(train_size,         data,       random_seed=random_seed) 
+            self.test,  data      = _simple_sampler(test_size,          data,       random_seed=random_seed)
+            self.validation, data = _simple_sampler(validation_size,    data,       random_seed=random_seed)
     
 
     def save(self, train_path: Path, test_path: Path, validation_path: Path) -> bool:
