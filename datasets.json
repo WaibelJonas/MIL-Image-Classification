@@ -1,0 +1,8 @@
+{
+ "UBC-OCEAN": {
+  "slides":         "/share/UBC-OCEAN/",
+  "roi":            "",
+  "tiles":          "/data/waibeljo/MIL-Image-Classification/tiles",
+  "tfrecords":      "/data/waibeljo/MIL-Image-Classification/tfrecords"
+ }
+}
