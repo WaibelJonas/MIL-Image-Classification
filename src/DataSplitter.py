@@ -102,7 +102,7 @@ class DataSplitter:
         if not csv_path.exists():
             raise FileNotFoundError(f"{csv_path.name} not found")
         fractions = [train_size, test_size, validation_size]
-        if sum(fractions) != 1.0:
+        if sum(fractions) - 1.0 > 0.001:
             raise ValueError("Sum of split fractions is not one")
         if any([frac > 1.0 or frac < 0.0 for frac in fractions]):
             raise ValueError("Given split fraction not in 0-1 range")

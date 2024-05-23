@@ -1,3 +1,4 @@
+import pandas as pd
 from DataSplitter import DataSplitter
 from utils import (
     DATASET_PATH,
@@ -12,10 +13,15 @@ if __name__ == "__main__":
     ds = DataSplitter(csv_path=DATASET_PATH / "train.csv",
                       label_col="label",
                       index_col="image_id",
+                      train_size=0.7,
+                      test_size=0.2,
+                      validation_size=0.1,
                       balance_classes=BALANCE)
     
+    
+    
     # Displaying class distribution in the splits
-    splits = {"Train": ds.train, "Test": ds.test, "Validation": ds.validation}
+    splits = {"Original": pd.read_csv(DATASET_PATH / "train.csv", index_col="image_id"), "Train": ds.train, "Test": ds.test, "Validation": ds.validation}
 
     for split_name, df in splits.items():
         class_counts = df["label"].value_counts()
