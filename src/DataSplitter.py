@@ -23,11 +23,11 @@ def _equal_balance_sampler(sample_fraction: float, dataframes: list[DataFrame],
     result = DataFrame()
 
     # Iterate over dataframes
-    for df in dataframes:
+    for index, df in enumerate(dataframes):
         # Take sample
         sample = df.sample(frac=sample_fraction, replace=False, random_state=random_seed)
         # Drop samples from original
-        if drop: df = df.drop(sample.index)
+        if drop: dataframes[index] = df.drop(sample.index)
         # Add to result
         result = concat([result, sample])
     
@@ -72,8 +72,8 @@ class DataSplitter:
     validation  :   DataFrame
 
     def __init__(self, csv_path: Path, label_col: str, index_col: str,
-                 train_size: float = 0.6, test_size: float = 0.2,
-                 validation_size: float = 0.2, balance_classes: bool = False,
+                 train_frac: float = 0.6, test_frac: float = 0.2,
+                 validation_frac: float = 0.2, balance_classes: bool = False,
                  random_seed: int = 42):
         """Splits a pandas Dataframe into a training, testing and validation
         subset. 
@@ -82,9 +82,9 @@ class DataSplitter:
             csv_path            (Path):                     Path to a csv file from which to construct the Dataframe
             label_col           (str):                      Name of the label column
             index_col           (str):                      Name of the index column
-            train_size          (float, optional):          Fraction of the train subset. Defaults to 0.6.
-            test_size           (float, optional):          Fraction of the test subset. Defaults to 0.2.
-            validation_size     (float, optional):          Fraction of the validation subset. Defaults to 0.2.
+            train_frac          (float, optional):          Fraction of the train subset. Defaults to 0.6.
+            test_frac          (float, optional):          Fraction of the test subset. Defaults to 0.2.
+            validation_frac     (float, optional):          Fraction of the validation subset. Defaults to 0.2.
             balance_classes     (bool, optional):           Whether to balance the class distribution. Defaults to False.
             random_seed         (int, optional):            Random state for reproducing results
         
@@ -101,7 +101,7 @@ class DataSplitter:
         # Error Handling
         if not csv_path.exists():
             raise FileNotFoundError(f"{csv_path.name} not found")
-        fractions = [train_size, test_size, validation_size]
+        fractions = [train_frac, test_frac, validation_frac]
         if sum(fractions) - 1.0 > 0.001:
             raise ValueError("Sum of split fractions is not one")
         if any([frac > 1.0 or frac < 0.0 for frac in fractions]):
@@ -112,21 +112,30 @@ class DataSplitter:
         
         # Balanced approach
         if balance_classes:
-            class_dfs = []
+            class_dfs: list[DataFrame] = []
             # Iterate over classes and split into dataframes
             for cls in np.unique(data[label_col]):
                 class_dfs.append(data.loc[data[label_col] == cls])
 
-            # Sample class dataframes into train, test, validation
-            self.train, class_dfs      = _equal_balance_sampler(train_size,         class_dfs,      random_seed=random_seed)
-            self.test, class_dfs       = _equal_balance_sampler(test_size,          class_dfs,      random_seed=random_seed)
-            self.validation, class_dfs = _equal_balance_sampler(validation_size,    class_dfs,      random_seed=random_seed)
+
+            # Split train set
+            self.train, class_dfs = _equal_balance_sampler(train_frac, class_dfs, random_seed=random_seed)
+            # Adjust test fraction to size of remaining data
+            test_frac = test_frac / (test_frac + validation_frac)
+            # Split test set
+            self.test, class_dfs = _equal_balance_sampler(test_frac, class_dfs, random_seed=random_seed)
+            # Split validation set (rest of data)
+            self.validation, _ = _equal_balance_sampler(1, class_dfs, random_seed=random_seed)
         
         # Simple approach
         else:
-            self.train, data      = _simple_sampler(train_size,         data,       random_seed=random_seed) 
-            self.test,  data      = _simple_sampler(test_size,          data,       random_seed=random_seed)
-            self.validation, data = _simple_sampler(validation_size,    data,       random_seed=random_seed)
+            # Split train set
+            self.train, data = _simple_sampler(train_frac, data, random_seed=random_seed)
+            # Adjust test fraction to size of remaining data
+            test_frac = test_frac / (test_frac + validation_frac)
+            self.test,  data = _simple_sampler(test_frac, data, random_seed=random_seed)
+            # Split validation set (rest of data)
+            self.validation, data = _simple_sampler(1, data, random_seed=random_seed)
     
 
     def save(self, train_path: Path, test_path: Path, validation_path: Path) -> bool:
