@@ -1,8 +1,14 @@
 {
- "UBC-OCEAN": {
-  "slides":         "/share/UBC-OCEAN/",
-  "roi":            "",
-  "tiles":          "/data/waibeljo/MIL-Image-Classification/tiles",
-  "tfrecords":      "/data/waibeljo/MIL-Image-Classification/tfrecords"
- }
+    "UBC-OCEAN": {
+        "slides":     "/share/UBC-OCEAN/",
+        "roi":        "",
+        "tiles":      "/data/waibeljo/MIL-Image-Classification/tiles/whole",
+        "tfrecords":  "/data/waibeljo/MIL-Image-Classification/tfrecords/whole"
+    },
+    "UBC-OCEAN-Thumbnails": {
+        "slides":     "/share/UBC-OCEAN/train_thumbnails",
+        "roi":        "",
+        "tiles":      "/data/waibeljo/MIL-Image-Classification/tiles/thumbnails",
+        "tfrecords":  "/data/waibeljo/MIL-Image-Classification/tfrecords/thumbnails"        
+    }
 }

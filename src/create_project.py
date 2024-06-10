@@ -1,7 +1,7 @@
 import pandas as pd
 import slideflow as sf
 from slideflow.util import is_project
-from utils import PROJECT_PATH
+from utils import PROJECT_PATH, DATASET_PATH
 
 if __name__ == "__main__":
 
@@ -14,9 +14,14 @@ if __name__ == "__main__":
             slides="/share/UBC-OCEAN/"
         )
 
-    # delete thumbnail entries from annotations.csv
     annotations = pd.read_csv(PROJECT_PATH / "annotations.csv", index_col="patient")
-    indices = annotations.index.astype(str).str                         # Get indices as string list
-    thumbnail_entries = annotations[indices.contains("_thumbnail")]
-    annotations.drop(thumbnail_entries, inplace=True)                   
+    # Add label annotation ('category' column) to annotations.csv
+    df = pd.read_csv(DATASET_PATH / "train.csv", index_col="image_id")
+    df.rename(columns={"label": "category"}, inplace=True)
+    df.index = df.index.astype(str)
+    for index, row in df.iterrows():
+        df.loc[f"{index}_thumbnail"] = row.copy()
+    annotations.update(df["category"])
+
+    # Save modified annotations.csv
     annotations.to_csv(PROJECT_PATH / "annotations.csv")
