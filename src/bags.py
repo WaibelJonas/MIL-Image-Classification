@@ -3,6 +3,10 @@ from slideflow.slide import qc
 from utils import PROJECT_PATH
 from slideflow.model import build_feature_extractor
 
+"""
+Pipeline for generating bags using histossl feature extractor
+Note: Not yet tested/executed
+"""
 
 if __name__ == "__main__":
 

@@ -7,9 +7,6 @@ if __name__ == "__main__":
 
     # Set backend to libvips (the default backend cucim does not support .png images)
     os.environ["SF_SLIDE_BACKEND"] = "libvips"
-    
-    # Initialize Stain Normalizer
-    reinhard = sf.norm.autoselect('reinhard')
 
     # Loading the project & metadata
     project = sf.load_project(PROJECT_PATH)
