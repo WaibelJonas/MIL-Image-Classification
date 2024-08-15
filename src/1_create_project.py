@@ -4,7 +4,7 @@ from slideflow.util import is_project
 from utils import PROJECT_PATH, DATASET_PATH
 
 """
-Creates project structure and modifies annotations.csv
+Creates project structure and modifies annotations.csv to better reflect the dataset
 """
 
 if __name__ == "__main__":
@@ -29,6 +29,7 @@ if __name__ == "__main__":
     for index, row in df.iterrows():
         df.loc[f"{index}_thumbnail"] = row.copy()
     annotations.update(df["category"])
+    annotations["slide"] = annotations.index
 
     # Save modified annotations.csv
     annotations.to_csv(PROJECT_PATH / "annotations.csv")

@@ -2,7 +2,12 @@ import numpy as np
 from pandas import DataFrame, read_csv, concat
 from dataclasses import dataclass
 from pathlib import Path
-from utils import RANDOM_SEED
+
+RANDOM_SEED: int = 42
+
+"""
+Utility Class to create distinct train, test and validation splits from a given .csv table
+"""
 
 
 def _equal_balance_sampler(sample_fraction: float, dataframes: list[DataFrame],
@@ -116,7 +121,6 @@ class DataSplitter:
             # Iterate over classes and split into dataframes
             for cls in np.unique(data[label_col]):
                 class_dfs.append(data.loc[data[label_col] == cls])
-
 
             # Split train set
             self.train, class_dfs = _equal_balance_sampler(train_frac, class_dfs, random_seed=random_seed)

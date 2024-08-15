@@ -1,13 +1,11 @@
 {
-    "name":                 "MIL-Image-Classification",
-    "annotations":          "./annotations.csv",
-    "dataset_config":       "./datasets.json",
-    "sources": 
-    [
-        "UBC-OCEAN",
-        "UBC-OCEAN-Thumbnails"
-    ],
-    "models_dir":           "./models",
-    "eval_dir":             "./eval",
-    "slideflow_version":    "2.3.1"
+ "name": "MyProject",
+ "annotations": "./annotations.csv",
+ "dataset_config": "./datasets.json",
+ "sources": [
+  "MIL-Image-Classification"
+ ],
+ "models_dir": "./models",
+ "eval_dir": "./eval",
+ "slideflow_version": "2.3.1"
 }

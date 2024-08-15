@@ -1,11 +1,18 @@
 import pandas as pd
 from pathlib import Path
-from DataSplitter import DataSplitter
-from utils import (
-    DATASET_PATH,
-    PROJECT_PATH
-)
+from legacy.DataSplitter import DataSplitter
 
+"""
+Splits train.csv from UBC-OCEAN into distinct train, test and validation splits using the DataSplitter Class
+"""
+
+# Root Project folder (borrowed from utils.py)
+PROJECT_PATH: Path = Path("/data/waibeljo/MIL-Image-Classification")
+
+# Path to dataset (borrowed from utils.py)
+DATASET_PATH: Path = Path("/share/UBC-OCEAN")
+
+# Balance classes in splits
 BALANCE: bool = True
 
 if __name__ == "__main__":
@@ -40,6 +47,7 @@ if __name__ == "__main__":
     print(f"Overlap between train and validation set:   {train_val_overlap}")
     print(f"Overlap between validation and test set:    {val_test_overlap}")
 
+    # Ensure the splits are distinct
     if all(overlap == 0 for overlap in [train_test_overlap, train_val_overlap, val_test_overlap]):
         # Save splits as .csvs
         ds.save(train_path=PROJECT_PATH / "data" / "train.csv",
