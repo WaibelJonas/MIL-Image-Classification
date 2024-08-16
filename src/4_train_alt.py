@@ -1,55 +1,50 @@
-import json
-from utils import PROJECT_PATH
-import slideflow as sf
-from slideflow.mil import mil_config, train_mil, eval_mil
 import os
+import warnings
+import slideflow as sf
+from slideflow.mil import train_mil
+from slideflow.mil import TrainerConfigFastAI
 
-with open("/share/praktikum2024/train_test_split.json", "r") as f:
-        splits = json.load(f)
-project = sf.load_project(PROJECT_PATH)
 
-entry: dict = splits[0]
+from utils import PROJECT_PATH, BAGS_PATH, MODEL_PATH
 
-for key, value in entry.items():
-    print(f"{key}: {value}")
 
-"""
-train_slides = list(splits['splits']['train'].keys())
-val_slides = list(splits['splits']['val'].keys())
-test_slides = list(splits['splits']['test'].keys())
+if __name__ == "__main__":
 
-train_dataset = project.dataset(
-            tile_px=512,
-            tile_um=20,
-            filters={'slide': train_slides}
-        )
+    os.environ["SF_LOGGING_LEVEL"] = "10"
 
-val_dataset = project.dataset(
-            tile_px=512,
-            tile_um=20,
-            filters={'slide': val_slides}
-        )
-test_dataset = project.dataset(
-            tile_px=512,
-            tile_um=20,
-            filters={'slide': test_slides}
-        )
+    # Load the project
+    project = sf.load_project(PROJECT_PATH)
+    # Load torch dataset of thumbnails from project
+    ubc = project.dataset(
+        tile_px=512,
+        tile_um="20x",
+        config=(PROJECT_PATH / "datasets.json").name,
+        filters = {"dataset": ["train", "validation"]},
+        sources="MIL-Image-Classification"
+    )
 
-config = mil_config(
-            model='attention_mil',
-            lr=1e-4,
-            fit_one_cycle=True 
-        )
+    # filter dataset into train and validation
+    train = ubc.filter({"dataset": ["train"]})
+    val   = ubc.filter({"dataset": ["validation"]})
 
-outdir = os.path.join(PROJECT_PATH, 'hannasSplit')
-outcomes = 'label' 
-bags = '/storage/emilio/slideflow_project/bags'
-train_mil(
+    # Define the model configuration
+    config = TrainerConfigFastAI(
+        model = "attention_mil",
+        lr         = 1e-4,
+        batch_size = 64,
+        epochs     = 100
+    )
+
+    # Train the model
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore") # Ignore warnings
+        
+        train_mil(
             config=config,
-            train_dataset=train_dataset,
-            val_dataset=val_dataset,
-            outcomes=outcomes,
-            bags=bags,
-            outdir=outdir
+            train_dataset=train,
+            val_dataset=val,
+            outcomes="label",
+            project=project,
+            bags=str(BAGS_PATH),
+            outdir=str(MODEL_PATH),
         )
-"""

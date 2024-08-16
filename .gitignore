@@ -164,3 +164,4 @@ tfrecords/
 tiles/
 models/
 bags/
+src/main.py

@@ -1,10 +1,19 @@
 import pandas as pd
 import slideflow as sf
 from slideflow.util import is_project
-from utils import PROJECT_PATH, DATASET_PATH
+from utils import (
+    PROJECT_PATH,
+    DATASET_PATH,
+    SPLIT_PATH
+)
 
 """
-Creates project structure and modifies annotations.csv to better reflect the dataset
+Pipeline Step 1: Create Project
+
+-> Creates project structure and modifies annotations.csv to better reflect the dataset.
+-> Adds 'category' and 'slide' columns to annotations.csv.
+-> Adds 'dataset' column to annotations.csv annotating to which split each image belongs.
+-> This script should be run only once.
 """
 
 if __name__ == "__main__":
@@ -21,15 +30,29 @@ if __name__ == "__main__":
     # Load annotations
     annotations = pd.read_csv(PROJECT_PATH / "annotations.csv", index_col="patient")
 
-    # Add label annotation ('category' column) to annotations.csv
+    # Add label annotation ('label' column) to annotations.csv
     df = pd.read_csv(DATASET_PATH / "train.csv", index_col="image_id")
-    df.rename(columns={"label": "category"}, inplace=True)
     df.index = df.index.astype(str)
-    # Adding identical thumbnail entries
-    for index, row in df.iterrows():
-        df.loc[f"{index}_thumbnail"] = row.copy()
-    annotations.update(df["category"])
+    annotations.update(df["label"])
+
+    # Add slide annotation to annotations.csv
     annotations["slide"] = annotations.index
+
+    # Load test, train and validation splits
+    test  = pd.read_csv(SPLIT_PATH / "test.csv",  index_col="image_id")
+    train = pd.read_csv(SPLIT_PATH / "train.csv", index_col="image_id")
+    val   = pd.read_csv(SPLIT_PATH / "validation.csv",   index_col="image_id")
+
+    # Add dataset annotation to annotations.csv
+    for idx in annotations.index:
+        if idx in test.index:
+            annotations.loc[idx, "dataset"] = "test"
+        elif idx in train.index:
+            annotations.loc[idx, "dataset"] = "train"
+        elif idx in val.index:
+            annotations.loc[idx, "dataset"] = "validation"
+        else:
+            continue
 
     # Save modified annotations.csv
     annotations.to_csv(PROJECT_PATH / "annotations.csv")

@@ -1,7 +1,6 @@
 import os
 from slideflow.slide import qc
 import slideflow as sf
-
 from pathlib import Path
 from utils import (
     PROJECT_PATH,
@@ -10,6 +9,14 @@ from utils import (
     batch_generator,
     batch_conversion
 )
+
+"""
+Pipeline step 2: Tiling
+
+-> Extracts tiles from Whole Slide Images (WSI) and saves them on the shared storage.
+-> The tiling is done in batches to avoid memory issues.
+-> Expect long runtime for large datasets.
+"""
 
 TIFF_BUFFER_PATH  = PROJECT_PATH / "tiffs"   # Path to temorarily save the converted tiffs
 CLEAR_BUFFER      = True                     # Whether to clear the tiff buffer after processing

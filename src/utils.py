@@ -44,6 +44,9 @@ SHARE_PATH: Path = Path("/share/praktikum2024")
 # Path to TFRecord folder
 TFRECORD_PATH: Path = SHARE_PATH / "tfrecords"
 
+# Path to splits folder
+SPLIT_PATH: Path = SHARE_PATH / "splits"
+
 # Generic Type for Annotations
 T = TypeVar('T')
 

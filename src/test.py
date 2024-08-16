@@ -8,4 +8,8 @@ SPLIT_PATH = Path("/share/praktikum2024/splits")
 
 if __name__ == "__main__":
 
-    print("test")
+    ann = pd.read_csv("annotations.csv", index_col="patient")
+
+    ann.rename(columns={"category": "label"}, inplace=True)
+
+    ann.to_csv("annotations.csv")

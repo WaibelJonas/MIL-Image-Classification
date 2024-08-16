@@ -5,7 +5,11 @@ from slideflow.model import build_feature_extractor
 from utils import PROJECT_PATH, BAGS_PATH
 
 """
-Pipeline for generating bags using histossl feature extractor
+Pipeline step 3: Generate feature bags
+
+-> Extracts features from tiles and saves them in the local project storage.
+-> Uses the plip feature extractor.
+-> Expect long runtime for large datasets.
 """
 
 if __name__ == "__main__":
@@ -22,11 +26,11 @@ if __name__ == "__main__":
         sources="MIL-Image-Classification"
     )
     
-    plip = build_feature_extractor("plip", tile_px = 512)
+    histo = build_feature_extractor("histossl", tile_px = 512)
 
     project.generate_feature_bags(
-        model   = plip,
+        model   = histo,
         dataset = ubc,
-        outdir  = BAGS_PATH
+        outdir  = str(BAGS_PATH)
     )
 7

@@ -1,4 +1,4 @@
-patient,dataset,category,slide
+patient,dataset,label,slide
 52752,test,EC,52752
 63941,test,HGSC,63941
 1925,test,HGSC,1925
@@ -14,9 +14,9 @@ patient,dataset,category,slide
 48973,test,HGSC,48973
 26124,test,HGSC,26124
 61852,test,HGSC,61852
-6793,test,EC,6793
+6793,train,EC,6793
 55279,test,EC,55279
-66,test,LGSC,66
+66,train,LGSC,66
 14039,test,HGSC,14039
 11263,test,CC,11263
 16209,test,HGSC,16209
@@ -29,7 +29,7 @@ patient,dataset,category,slide
 65022,test,LGSC,65022
 15871,test,HGSC,15871
 54928,test,CC,54928
-431,test,HGSC,431
+431,train,HGSC,431
 27315,test,CC,27315
 29240,test,HGSC,29240
 25561,test,HGSC,25561
@@ -117,7 +117,7 @@ patient,dataset,category,slide
 18813,train,CC,18813
 10143,train,HGSC,10143
 39880,train,CC,39880
-1252,train,HGSC,1252
+1252,validation,HGSC,1252
 6175,train,HGSC,6175
 29615,train,CC,29615
 31594,train,EC,31594
