@@ -10,8 +10,9 @@ This project contains the pipeline for training and evaluating a Multiple Instan
 2. [Structure](#2-structure)
 3. [Installation](#3-installation)
 4. [Usage](#4-usage)
-5. [Evaluation](#5-evaluation-and-metrics)
-6. [Challenges](#6-ressources)
+5. [Evaluation](#5-evaluation)
+6. [Challenges](#6-challenges)
+7. [Ressources](#7-ressources)
 ---
 
 ## 1. Introduction
@@ -185,7 +186,7 @@ Average average precision:  0.819590204805794
 
 ---
 
-## 5. Challenges
+## 6. Challenges
 
 Due to the extreme pixel count and the unconventional Image format (Whole Slide Images are not commonly stored as PNGs), tiling the data posed a challenge, since slideflow was unable to process the original images. As a result, the tiling process involves first converting the images into pyramid TIFFs and then tiling them. This is done in small batches to reduce memory consumption.
 
@@ -203,7 +204,7 @@ slide = sf.WSI(path, mpp=0.5, **wsi_kwargs)
 ---
 
 
-### 6. Ressources
+### 7. Ressources
 
 - UBC-OCEAN: https://www.kaggle.com/competitions/UBC-OCEAN/overview
 
