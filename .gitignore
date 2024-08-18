@@ -160,8 +160,5 @@ cython_debug/
 #.idea/
 
 # Project
-tfrecords/
-tiles/
-models/
-bags/
-src/main.py
+models/*
+bags/*

@@ -8,12 +8,13 @@ from utils import (
 )
 
 """
-Pipeline Step 1: Create Project
+Pre Pipeline Step: Create Project
 
 -> Creates project structure and modifies annotations.csv to better reflect the dataset.
 -> Adds 'category' and 'slide' columns to annotations.csv.
 -> Adds 'dataset' column to annotations.csv annotating to which split each image belongs.
--> This script should be run only once.
+
+-> This script does not have to be run and is here for documentation purposes.
 """
 
 if __name__ == "__main__":
