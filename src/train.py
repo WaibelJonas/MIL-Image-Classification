@@ -6,15 +6,25 @@ from pathlib import Path
 from slideflow.mil import mil_config, train_mil
 from sklearn.model_selection import KFold
 
-from utils import PROJECT_PATH, SHARE_PATH, BAGS_PATH, MODEL_PATH
+from utils import (
+    TILE_SIZE,
+    TILE_UM,
+    EPOCHS,
+    LEARNING_RATE,
+    BATCH_SIZE,
+    PROJECT_PATH,
+    SPLIT_PATH,
+    BAGS_PATH,
+    MODEL_PATH
+)
 
 """
 
 """
 
-def train(tile_px: int = 512, tile_um: str = "20x",
-          bags_path: Path = BAGS_PATH, split_path: Path = SHARE_PATH / "splits.json", model_path: Path = MODEL_PATH,
-          batch_size: int = 32, epochs: int = 40, learning_rate: float = 1e-4):
+def train(tile_px: int = TILE_SIZE, tile_um: str = TILE_UM,
+          bags_path: Path = BAGS_PATH, split_path: Path = SPLIT_PATH, model_path: Path = MODEL_PATH,
+          batch_size: int = BATCH_SIZE, epochs: int = EPOCHS, learning_rate: float = LEARNING_RATE):
     """
     Pipeline step 4: Train MIL model
 
@@ -60,7 +70,8 @@ def train(tile_px: int = 512, tile_um: str = "20x",
         model      = "attention_mil",
         trainer    = "fastai",
         lr         = learning_rate,
-        epochs     = epochs
+        epochs     = epochs,
+        batch_size = batch_size
     )
 
     # Iterate over folds
@@ -90,11 +101,12 @@ def train(tile_px: int = 512, tile_um: str = "20x",
 
 if __name__ == "__main__":
     train(
-        tile_px = 512,
-        tile_um = "20x",
+        tile_px = TILE_SIZE,
+        tile_um = TILE_UM,
         bags_path = BAGS_PATH,
-        split_path = SHARE_PATH / "splits.json",
+        split_path = SPLIT_PATH,
         model_path = MODEL_PATH,
-        batch_size = 32,
-        epochs = 40
+        batch_size = BATCH_SIZE,
+        learning_rate=LEARNING_RATE,
+        epochs = EPOCHS,
     )

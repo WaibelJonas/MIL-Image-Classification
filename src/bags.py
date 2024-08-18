@@ -3,11 +3,11 @@ import slideflow as sf
 from pathlib import Path
 from slideflow.model import build_feature_extractor
 
-from utils import PROJECT_PATH, BAGS_PATH
+from utils import TILE_SIZE, TILE_UM, FEATURE_EXTRACTOR, PROJECT_PATH, BAGS_PATH
 
 
 
-def bags(tile_px: int = 512, tile_um: str = "20x", feature_extractor: str = "histossl", outdir: Path = BAGS_PATH):
+def bags(tile_px: int = TILE_SIZE, tile_um: str = TILE_UM, feature_extractor: str = FEATURE_EXTRACTOR, outdir: Path = BAGS_PATH):
     """
     Pipeline step 3: Generate feature bags
 
@@ -33,11 +33,9 @@ def bags(tile_px: int = 512, tile_um: str = "20x", feature_extractor: str = "his
         config=(PROJECT_PATH / "datasets.json").name,
         sources="MIL-Image-Classification"
     )
-    
-    histo = build_feature_extractor(feature_extractor, tile_px = tile_px)
 
     project.generate_feature_bags(
-        model   = histo,
+        model   = feature_extractor,
         dataset = ubc,
         outdir  = str(outdir)
     )
@@ -45,9 +43,9 @@ def bags(tile_px: int = 512, tile_um: str = "20x", feature_extractor: str = "his
 
 if __name__ == "__main__":
     bags(
-        tile_px = 512,
-        tile_um = "20x",
-        feature_extractor = "histossl",
+        tile_px = TILE_SIZE,
+        tile_um = TILE_UM,
+        feature_extractor = FEATURE_EXTRACTOR,
         outdir = BAGS_PATH
     )
 

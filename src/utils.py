@@ -67,7 +67,7 @@ TIFF_BUFFER_SIZE: int = 10
 # --- Bags ---
 
 # Feature Extractor to use
-FEATURE_EXTRACTOR: str = "histossl"
+FEATURE_EXTRACTOR: str = "plip"
 
 # --- Training ---
 
@@ -79,10 +79,6 @@ BATCH_SIZE: int = 32
 
 # Number of Epochs
 EPOCHS: int = 40
-
-# --- Evaluation ---
-
-
 
 # ----------------------- #
 # --- Utility methods --- #

@@ -22,8 +22,8 @@ from utils import (
 )
 
 @command()
-@option("--skip-tiling",      is_flag=True,  default=True,   help="Skip tiling",      show_default=True)
-@option("--skip-bags",        is_flag=True,  default=True,   help="Skip bags",        show_default=True)
+@option("--skip-tiling",      is_flag=True,  default=False,   help="Skip tiling",      show_default=True)
+@option("--skip-bags",        is_flag=True,  default=False,   help="Skip bags",        show_default=True)
 @option("--skip-train",       is_flag=True,  default=False,  help="Skip train",       show_default=True)
 @option("--skip-evaluation",  is_flag=True,  default=False,  help="Skip evaluation",  show_default=True)
 def main(skip_tiling: bool = True, skip_bags: bool = True, skip_train: bool = False, skip_evaluation: bool = False):

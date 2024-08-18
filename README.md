@@ -189,7 +189,7 @@ Average average precision:  0.819590204805794
 
 Due to the extreme pixel count and the unconventional Image format (Whole Slide Images are not commonly stored as PNGs), tiling the data posed a challenge, since slideflow was unable to process the original images. As a result, the tiling process involves first converting the images into pyramid TIFFs and then tiling them. This is done in small batches to reduce memory consumption.
 
-Unfortunately, slideflow is unable to detect the appropriate microns-per-pixel itself using this approach. This might be patched in future versions (we were using slideflow 3.0.0) but for the time being There are 2 ways of circumventing this issue:
+Unfortunately, slideflow is unable to detect the appropriate microns-per-pixel itself using this approach. This might be patched in future versions (we were using slideflow 2.3.1) but for the time being There are 2 ways of circumventing this issue:
 
 1. (Our Solution) Manually pass the mpp into every instance of WSI in ```slideflow/dataset.py``` i.e
 ```
